@@ -71,7 +71,10 @@ echo ========================================
 
 javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
   com/wastemanagement/model/User.java ^
-  com/wastemanagement/model/WasteRecord.java
+  com/wastemanagement/model/WasteRecord.java ^
+  com/wastemanagement/model/CollectionSession.java ^
+  com/wastemanagement/model/Redemption.java ^
+  com/wastemanagement/model/Complaint.java
 
 if errorlevel 1 (
     echo ERROR: Failed to compile model classes
@@ -88,7 +91,10 @@ echo ========================================
 
 javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
   com/wastemanagement/dao/UserDAO.java ^
-  com/wastemanagement/dao/WasteDAO.java
+  com/wastemanagement/dao/WasteDAO.java ^
+  com/wastemanagement/dao/CollectionDAO.java ^
+  com/wastemanagement/dao/RedemptionDAO.java ^
+  com/wastemanagement/dao/ComplaintsDAO.java
 
 if errorlevel 1 (
     echo ERROR: Failed to compile DAO classes
@@ -107,7 +113,11 @@ javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
   com/wastemanagement/controller/LoginServlet.java ^
   com/wastemanagement/controller/RegisterServlet.java ^
   com/wastemanagement/controller/LogoutServlet.java ^
-  com/wastemanagement/controller/WasteServlet.java
+  com/wastemanagement/controller/WasteServlet.java ^
+  com/wastemanagement/controller/CollectionServlet.java ^
+  com/wastemanagement/controller/RedemptionServlet.java ^
+  com/wastemanagement/controller/AdminRedemptionServlet.java ^
+  com/wastemanagement/controller/ComplaintsServlet.java
 
 if errorlevel 1 (
     echo ERROR: Failed to compile servlet classes

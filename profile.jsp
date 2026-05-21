@@ -30,11 +30,32 @@
         <div class="container">
             <div class="brand">♻️ Waste Monitor</div>
             <div class="nav-links">
-                <a href="dashboard.jsp">Dashboard</a>
-                <a href="waste-collection.jsp">Log Waste</a>
-                <a href="history.jsp">History</a>
-                <a href="profile.jsp">Profile</a>
-                <a href="logout">Logout</a>
+                <%
+                    String role = (String) session.getAttribute(Constants.SESSION_ROLE);
+                    if (Constants.ROLE_CITIZEN.equals(role)) {
+                %>
+                    <a href="citizenDashboard.jsp">Dashboard</a>
+                    <a href="history.jsp">Waste History</a>
+                    <a href="rewards.jsp">Rewards</a>
+                    <a href="redemption.jsp">Redeem</a>
+                    <a href="profile.jsp">Profile</a>
+                    <a href="logout">Logout</a>
+                <%
+                    } else if (Constants.ROLE_WORKER.equals(role)) {
+                %>
+                    <a href="workerDashboard.jsp">Dashboard</a>
+                    <a href="collectionForm.jsp">Record Collection</a>
+                    <a href="profile.jsp">Profile</a>
+                    <a href="logout">Logout</a>
+                <%
+                    } else if (Constants.ROLE_ADMIN.equals(role)) {
+                %>
+                    <a href="adminDashboard.jsp">Dashboard</a>
+                    <a href="profile.jsp">Profile</a>
+                    <a href="logout">Logout</a>
+                <%
+                    }
+                %>
             </div>
         </div>
     </nav>
@@ -56,6 +77,33 @@
                     <div class="profile-field">
                         <label>Email:</label>
                         <p><%= user.getEmail() %></p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Role:</label>
+                        <p><%= user.getRole() %></p>
+                    </div>
+                    
+                    <% if (com.wastemanagement.util.Constants.ROLE_CITIZEN.equals(user.getRole())) { %>
+                    <div class="profile-field">
+                        <label>Ward:</label>
+                        <p><%= user.getWard() != null ? user.getWard() : "-" %></p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Address:</label>
+                        <p><%= user.getAddress() != null ? user.getAddress() : "-" %></p>
+                    </div>
+                    <% } %>
+                    
+                    <div class="profile-field">
+                        <label>Citizen QR Code:</label>
+                        <p><%= user.getQrCode() != null ? user.getQrCode() : "-" %></p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Reward Points:</label>
+                        <p><%= user.getPoints() %></p>
                     </div>
                     
                     <div class="profile-field">

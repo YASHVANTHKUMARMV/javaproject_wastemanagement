@@ -29,4 +29,17 @@ public class Constants {
     public static final String SESSION_USER = "user";
     public static final String SESSION_EMAIL = "email";
     public static final String SESSION_ID = "userId";
+    public static final String SESSION_ROLE = "role";
+    public static final String SESSION_QR = "qrCode";
+    public static final String SESSION_POINTS = "points";
+
+    // Roles
+    public static final String ROLE_CITIZEN = "CITIZEN";
+    public static final String ROLE_WORKER = "WORKER";
+    public static final String ROLE_ADMIN = "ADMIN";
+
+    // Redemption statuses
+    public static final String REDEMPTION_PENDING = "PENDING";
+    public static final String REDEMPTION_APPROVED = "APPROVED";
+    public static final String REDEMPTION_REJECTED = "REJECTED";
 }

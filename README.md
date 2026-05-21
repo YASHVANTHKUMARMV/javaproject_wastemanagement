@@ -2,437 +2,186 @@
 
 ## Overview
 
-A lightweight, academic-level Smart Waste Monitoring System built with Java Servlets, JSP, MySQL, and JDBC. Designed for learning and demonstration purposes.
-
-## System Architecture
-
-### Technology Stack
-- **Frontend**: JSP, HTML5, CSS3
-- **Backend**: Java Servlets (Tomcat 9.0)
-- **Database**: MySQL 5.7+
-- **JDBC Driver**: MySQL Connector/J 9.6.0
-- **Pattern**: MVC (Model-View-Controller)
-
-### Project Structure
-
-#### 1. Model Layer (`com.wastemanagement.model`)
-**Purpose**: Data representation objects
-
-- **User.java**: Represents a user in the system
-  - Properties: id, name, email, password, createdAt
-  - Methods: Getters/Setters
-
-- **WasteRecord.java**: Represents a waste collection entry
-  - Properties: id, userId, wasteType, quantity, unit, location, date, notes
-  - Methods: Getters/Setters
-
-#### 2. Data Access Layer (`com.wastemanagement.dao`)
-**Purpose**: Database operations and queries
-
-- **UserDAO.java**: Handles user-related database operations
-  - `registerUser()`: Insert new user
-  - `authenticateUser()`: Validate login credentials
-  - `emailExists()`: Check if email is already registered
-  - `getUserById()`: Retrieve user profile
-  - `updateUser()`: Update user information
-
-- **WasteDAO.java**: Handles waste record operations
-  - `addWasteRecord()`: Insert new waste entry
-  - `getRecordsByUserId()`: Fetch all records for a user
-  - `getTotalWasteByType()`: Get waste statistics by type
-  - `getTotalWaste()`: Get total waste collected
-  - `deleteRecord()`: Remove a waste entry
-
-#### 3. Controller Layer (`com.wastemanagement.controller`)
-**Purpose**: Handle HTTP requests and business logic
-
-- **LoginServlet.java**: Handles user login
-  - Endpoint: POST `/login`
-  - Validates email and password
-  - Creates session on successful login
-  - Redirects to dashboard
-
-- **RegisterServlet.java**: Handles user registration
-  - Endpoint: POST `/register`
-  - Validates input and checks for duplicate emails
-  - Creates new user account
-  - Redirects to login page
-
-- **LogoutServlet.java**: Handles user logout
-  - Endpoint: GET `/logout`
-  - Invalidates user session
-  - Redirects to home page
-
-- **WasteServlet.java**: Handles waste logging
-  - Endpoint: POST `/waste`
-  - Requires active session
-  - Validates waste data
-  - Stores record in database
-
-#### 4. Utility Layer (`com.wastemanagement.util`)
-**Purpose**: Shared utilities and configurations
-
-- **DBConnection.java**: Database connection management
-  - Static method: `getConnection()` - Returns new MySQL connection
-  - Static method: `closeConnection()` - Safely closes connection
-  - Centralized credentials and driver configuration
-
-- **Constants.java**: Application-wide constants
-  - Session attribute names
-  - Error/success messages
-  - Waste type options
-
-### View Layer (JSP Pages)
-
-#### Public Pages (No Authentication)
-- **index.jsp**: Landing page with features overview
-- **login.jsp**: User login form
-- **register.jsp**: User registration form
-- **error.jsp**: Error handling page
-
-#### Protected Pages (Requires Login)
-- **dashboard.jsp**: Main dashboard with navigation options
-- **waste-collection.jsp**: Form to log waste
-- **history.jsp**: View all waste records with statistics
-- **profile.jsp**: User profile and account information
-
-### Styling
-
-- **css/style.css**: Modern, responsive design
-  - Gradient color scheme (purple/blue)
-  - Mobile-first approach
-  - Flexbox and Grid layouts
-  - Hover effects and transitions
-  - Print-friendly styles
-
----
-
-## Database Schema
-
-### Table: users
-```sql
-id INT PRIMARY KEY AUTO_INCREMENT
-name VARCHAR(100) NOT NULL
-email VARCHAR(100) UNIQUE NOT NULL
-password VARCHAR(255) NOT NULL
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-```
-
-### Table: waste_collection
-```sql
-id INT PRIMARY KEY AUTO_INCREMENT
-user_id INT NOT NULL (FOREIGN KEY)
-waste_type VARCHAR(50) NOT NULL
-quantity DOUBLE NOT NULL
-unit VARCHAR(20) DEFAULT 'kg'
-location VARCHAR(200) NOT NULL
-date DATE NOT NULL
-notes TEXT
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-```
-
-### Table: waste_logs
-```sql
-id INT PRIMARY KEY AUTO_INCREMENT
-user_id INT NOT NULL (FOREIGN KEY)
-action VARCHAR(100) NOT NULL
-description TEXT
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-```
-
----
-
-## Data Flow
-
-### Registration Flow
-```
-User fills form
-    ↓
-POST /register
-    ↓
-RegisterServlet validates input
-    ↓
-Check email not duplicate (UserDAO.emailExists)
-    ↓
-Create User object
-    ↓
-UserDAO.registerUser() - Insert into DB
-    ↓
-Success → Redirect to login.jsp
-Error → Show error message
-```
-
-### Login Flow
-```
-User enters credentials
-    ↓
-POST /login
-    ↓
-LoginServlet validates input
-    ↓
-UserDAO.authenticateUser() - Query database
-    ↓
-Match found → Create session
-    ↓
-Redirect to dashboard.jsp
-```
-
-### Waste Logging Flow
-```
-User fills waste form
-    ↓
-POST /waste
-    ↓
-WasteServlet checks session
-    ↓
-Validate input data
-    ↓
-Create WasteRecord object
-    ↓
-WasteDAO.addWasteRecord() - Insert into DB
-    ↓
-Success → Show confirmation
-Error → Show error message
-```
-
-### View History Flow
-```
-User visits /history.jsp
-    ↓
-Check session (protected page)
-    ↓
-WasteDAO.getRecordsByUserId() - Fetch records
-    ↓
-WasteDAO.getTotalWaste() - Get statistics
-    ↓
-Display records in table with stats
-```
-
----
-
-## Security Considerations
-
-### Current Implementation
-- ✅ Session-based authentication
-- ✅ Prepared statements (prevent SQL injection)
-- ✅ Email uniqueness validation
-- ✅ Session timeout (30 minutes)
-- ✅ Protected pages (require login)
-
-### Recommended Improvements
-- ❌ Passwords stored in plain text (should use bcrypt/hashing)
-- ❌ No HTTPS enforcement (should use in production)
-- ❌ No input sanitization (add validation libraries)
-- ❌ No CSRF protection (add CSRF tokens)
+A premium, dynamic Smart Waste Monitoring System built with Java Servlets, JSP, JDBC, and MySQL. It features a modern role-based (Citizen, Sanitation Worker, Admin) workflow, QR-code citizen verification, real-time conveyor belt sorting simulation, automated points calculations, rewards redemptions via UPI, and interactive admin dashboards with data visualization (Chart.js).
 
 ---
 
 ## Key Features
 
-### 1. Authentication System
-- User registration with validation
-- Email/password login
-- Session management
-- Logout functionality
-- "Remember session" across pages
+### 1. Role-Based Authentication & Portal Access
+* **Role Options**: Users can register and log in as one of three distinct roles:
+  * **Citizen**: Views their unique profile QR Code/ID, waste collection history, rewards balance, and points redemption options.
+  * **Sanitation Worker**: Verifies citizens using QR scanning or manual QR ID lookup, logs real-time waste weights, and runs conveyor belt sorting.
+  * **Admin**: Monitors ward-wise performance, waste distribution charts, registered citizen and worker directories, and approves/rejects points redemptions.
+* **Ward-Wise Registration**: Captures address and ward location for optimized routing and metrics tracking.
 
-### 2. Waste Management
-- Log waste with multiple categories
-- Track quantity and location
-- Add notes and descriptions
-- View complete history
-- Calculate total waste collected
+### 2. Real-Time QR Verification
+* **Citizen QR Profile**: Every citizen gets a unique QR Code image and corresponding alphanumeric QR Code ID generated at registration.
+* **Worker lookup**: Sanitation workers enter or scan the citizen's QR Code ID to establish a real-time collection session.
 
-### 3. Dashboard
-- Quick navigation to features
-- User welcome message
-- Quick statistics
-- Action buttons for main tasks
+### 3. Waste Sorting Simulation & Database Records
+* **Conveyor Belt Animation**: Visualizing conveyor belt sorting when weights are submitted.
+* **Segregation Score**: Calculates a dynamic segregation accuracy percentage based on:
+  $$\text{Accuracy} = \frac{\text{Organic (Wet)} + \text{Dry}}{\text{Total Collected}} \times 100$$
+* **Reward Points**: Rewards are automatically calculated ($1\text{ point per kg of correctly segregated waste}$) and added to the citizen's profile.
+* **Collection Database Logging**: Stores worker, citizen, waste type weights, notes, and session dates in the SQL database.
 
-### 4. Responsive Design
-- Works on desktop, tablet, mobile
-- Touch-friendly buttons
-- Optimized forms
-- Flexible grid layouts
+### 4. Reward Redemption & UPI Integration
+* **Redemption Portal**: Citizens can redeem accumulated points (e.g. 100 points = ₹10) for public transport vouchers.
+* **UPI Checkout**: Interactive GPay/PhonePe simulated checkout overlay where users enter their UPI ID and receive instant virtual payments.
+* **Admin Review**: Redemptions are sent as "PENDING" to the Admin dashboard, where the Admin can approve or reject them.
 
----
-
-## Configuration
-
-### Database Connection (DBConnection.java)
-```java
-URL = "jdbc:mysql://localhost:3306/wastemanagement"
-USER = "root"
-PASSWORD = "vasanth@1717"
-DRIVER = "com.mysql.cj.jdbc.Driver"
-```
-
-### Session Timeout (web.xml)
-```xml
-<session-config>
-    <timeout>30</timeout>  <!-- 30 minutes -->
-</session-config>
-```
+### 5. Interactive Admin Dashboards
+* **Aggregated Charts (Chart.js)**:
+  * Doughnut chart showing Wet (Organic) vs. Dry vs. Reject waste distribution.
+  * Line graph tracking daily collection trends.
+  * Bar chart comparing average segregation accuracy by ward.
+* **Directories**: Dynamic tabular directories showing all registered Citizens (names, wards, points) and Sanitation Workers.
+* **Collection Logs**: Shows recent collection activities with individual segregation scores, wet/dry/reject weights, and points awarded in real-time.
 
 ---
 
-## Deployment Checklist
+## System Architecture
 
-- [ ] MySQL database created
-- [ ] Database tables created
-- [ ] Java classes compiled
-- [ ] WAR file created or deployed to Tomcat
-- [ ] Database credentials configured
-- [ ] MySQL JDBC driver in lib folder
-- [ ] Tomcat started
-- [ ] Application accessible at http://localhost:8080/Userwebapps/
-- [ ] Test registration and login
-- [ ] Test waste logging and history
+### Technology Stack
+* **Frontend**: JSP, HTML5, Vanilla CSS3 (Outfit Google Font, glassmorphism templates, responsive layout).
+* **Backend**: Java Servlets (Tomcat 9.0).
+* **Database**: MySQL 5.7 / 8.0+.
+* **JDBC Driver**: MySQL Connector/J 9.6.0.
+* **Pattern**: MVC (Model-View-Controller).
 
----
-
-## File Locations
+### Project Directory Structure
 
 ```
-c:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\Userwebapps\
+Userwebapps/
 ├── WEB-INF/
-│   ├── classes/com/wastemanagement/
-│   ├── lib/mysql-connector-j-9.6.0.jar
-│   ├── web.xml
-│   └── database_setup.sql
-├── css/style.css
-├── *.jsp files
-├── DEPLOYMENT_GUIDE.md
-└── README.md
+│   ├── classes/
+│   │   └── com/wastemanagement/
+│   │       ├── controller/        # Servlets (Login, Register, Collection, Redemption, etc.)
+│   │       ├── dao/               # Database Queries (UserDAO, CollectionDAO, RedemptionDAO, etc.)
+│   │       ├── model/             # Entity Models (User, CollectionSession, Redemption, etc.)
+│   │       └── util/              # Database connection helper (DBConnection, Constants)
+│   ├── lib/                       # MySQL Connector JAR
+│   ├── web.xml                    # Servlet mapping and session configuration
+│   └── database_setup.sql         # Table schemas and sample test records
+├── css/
+│   └── style.css                  # UI theme, animations, dashboards, and responsive layout
+├── index.jsp                      # Welcome page
+├── login.jsp                      # Login form with role picker
+├── register.jsp                   # Multi-field signup form (Ward, Role, Address)
+├── citizenDashboard.jsp           # Citizen hub and QR display
+├── workerDashboard.jsp            # Worker hub and QR scan page
+├── collectionForm.jsp             # Conveyor sorting and weight log
+├── redemption.jsp                 # Points cash-out via UPI
+├── adminDashboard.jsp             # Main charts, Ward stats, user directories & logs
+├── adminRedemptions.jsp           # Approve/reject redemptions
+├── complaints.jsp                 # Complaints log
+└── profile.jsp                    # Account profile page
 ```
 
 ---
 
-## Testing
+## Database Schema
 
-### Manual Testing Steps
+### 1. `users` Table
+Stores registered accounts and profiles:
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'citizen', -- 'citizen', 'worker', 'admin'
+    ward VARCHAR(50),
+    address VARCHAR(255),
+    qr_code VARCHAR(100) UNIQUE,
+    points INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-1. **Registration Test**
-   - Navigate to `/register`
-   - Fill in name, email, password
-   - Submit and verify success message
-   - Check database for new user
+### 2. `collection_sessions` Table
+Records worker-logged waste collection details:
+```sql
+CREATE TABLE collection_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    worker_id INT NOT NULL,
+    citizen_id INT NOT NULL,
+    qr_code VARCHAR(100),
+    total_organic DOUBLE NOT NULL DEFAULT 0.0,
+    total_dry DOUBLE NOT NULL DEFAULT 0.0,
+    total_reject DOUBLE NOT NULL DEFAULT 0.0,
+    total_collected DOUBLE NOT NULL DEFAULT 0.0,
+    segregation_score DOUBLE NOT NULL DEFAULT 0.0,
+    points_awarded INT DEFAULT 0,
+    notes TEXT,
+    session_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (worker_id) REFERENCES users(id),
+    FOREIGN KEY (citizen_id) REFERENCES users(id)
+);
+```
 
-2. **Login Test**
-   - Navigate to `/login`
-   - Use registered email and password
-   - Verify redirect to dashboard
+### 3. `redemptions` Table
+Tracks points redemption requests:
+```sql
+CREATE TABLE redemptions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    points INT NOT NULL,
+    upi_id VARCHAR(100) NOT NULL,
+    status VARCHAR(20) DEFAULT 'PENDING', -- 'PENDING', 'APPROVED', 'REJECTED'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```
 
-3. **Waste Logging Test**
-   - Log in successfully
-   - Go to "Log Waste" page
-   - Fill in waste details
-   - Submit and verify entry in history
-
-4. **Session Test**
-   - Log in and keep browser open for 31 minutes
-   - Try to access protected page
-   - Verify automatic redirect to login
-
-5. **Logout Test**
-   - Click logout button
-   - Verify redirect to home page
-   - Try to access protected page without logging in
-   - Verify redirect to login page
-
----
-
-## Performance Optimization
-
-### Implemented
-- Index on user.email (fast lookups)
-- Index on waste_collection.user_id (fast history queries)
-- Connection pooling (via DBConnection utility)
-- Prepared statements (faster execution)
-
-### Potential Improvements
-- Add connection pooling library (HikariCP)
-- Cache frequently accessed data
-- Add pagination for large history lists
-- Compress CSS and minimize JS
-- Add database query optimization
-
----
-
-## Browser Compatibility
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
----
-
-## Known Limitations
-
-1. No password hashing (plain text storage)
-2. No email verification on registration
-3. No role-based access control (single user type)
-4. No file upload capability
-5. No real-time notifications
-6. No data export functionality
-7. Limited analytics/reporting
+### 4. `complaints` Table
+Tracks segregation issues and alerts:
+```sql
+CREATE TABLE complaints (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
+    status VARCHAR(20) DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```
 
 ---
 
-## Future Enhancement Ideas
+## Deployment & Setup
 
-1. **Advanced Features**
-   - Password recovery via email
-   - Two-factor authentication
-   - Admin dashboard
-   - User management panel
-   - Bulk waste entry via CSV import
+### Requirements
+1. **Tomcat 9.0** installed on port `8080`.
+2. **MySQL Database Server** running on port `3306`.
 
-2. **Analytics**
-   - Waste trends chart
-   - Department-wise statistics
-   - Monthly/yearly reports
-   - Comparative analysis
+### Connection Configuration (`DBConnection.java`)
+Verify MySQL login credentials match:
+```java
+private static final String URL = "jdbc:mysql://localhost:3306/wastemanagement";
+private static final String USER = "root";
+private static final String PASSWORD = "your_mysql_password";
+```
 
-3. **Integration**
-   - IoT sensor integration
-   - SMS notifications
-   - Email notifications
-   - API for mobile app
-
-4. **Performance**
-   - Caching layer (Redis)
-   - Database query optimization
-   - Async request processing
-   - Image/file storage
+### Compilation & Tomcat Deployment
+1. Run `build.bat` to compile Java sources and place files in `WEB-INF/classes`.
+2. Move/copy the `Userwebapps` folder into Tomcat's `webapps` directory.
+3. Start Tomcat using the setup scripts (`start-tomcat.bat` or Tomcat Service manager).
+4. Open your browser and navigate to: [http://localhost:8080/Userwebapps/](http://localhost:8080/Userwebapps/)
 
 ---
 
-## Support & Maintenance
+## Testing & Verification
 
-### Regular Tasks
-- Monitor database performance
-- Check error logs
-- Update dependencies
-- Backup database regularly
-- Review user activity
-
-### Troubleshooting Guide
-See DEPLOYMENT_GUIDE.md for common issues and solutions.
-
----
-
-## License & Credits
-
-- **Project**: Smart Waste Monitoring System
-- **Version**: 1.0 Academic Edition
-- **Created**: 2026-05-19
-- **Purpose**: Educational and Demonstration
-
----
-
-**Last Updated**: 2026-05-19
-**Status**: Production Ready (Academic Level)
+A Python automated integration script (`test_flow.py`) is provided to verify backend flows. Run the script:
+```bash
+python test_flow.py
+```
+This script tests:
+1. Citizen, Worker, and Admin registration and authentication.
+2. QR ID verification and lookups.
+3. Collection logging and point increments.
+4. Redemption creation, checkout, and approval mechanisms.

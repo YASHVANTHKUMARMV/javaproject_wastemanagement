@@ -44,6 +44,8 @@ echo.
 REM Change to classes directory
 cd /d "%CLASSES_DIR%"
 
+set CLASSPATH=.\;%JDBC_JAR%;%SERVLET_JAR%
+
 echo Current directory: %CD%
 echo.
 
@@ -51,7 +53,7 @@ echo ========================================
 echo STEP 1: Compiling Utility Classes
 echo ========================================
 
-javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
+javac -cp "%CLASSPATH%" ^
   com/wastemanagement/util/DBConnection.java ^
   com/wastemanagement/util/Constants.java
 
@@ -68,9 +70,12 @@ echo ========================================
 echo STEP 2: Compiling Model Classes
 echo ========================================
 
-javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
+javac -cp "%CLASSPATH%" ^
   com/wastemanagement/model/User.java ^
-  com/wastemanagement/model/WasteRecord.java
+  com/wastemanagement/model/WasteRecord.java ^
+  com/wastemanagement/model/CollectionSession.java ^
+  com/wastemanagement/model/Redemption.java ^
+  com/wastemanagement/model/Complaint.java
 
 if errorlevel 1 (
     echo ERROR: Failed to compile model classes
@@ -85,9 +90,12 @@ echo ========================================
 echo STEP 3: Compiling DAO Classes
 echo ========================================
 
-javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
+javac -cp "%CLASSPATH%" ^
   com/wastemanagement/dao/UserDAO.java ^
-  com/wastemanagement/dao/WasteDAO.java
+  com/wastemanagement/dao/WasteDAO.java ^
+  com/wastemanagement/dao/CollectionDAO.java ^
+  com/wastemanagement/dao/RedemptionDAO.java ^
+  com/wastemanagement/dao/ComplaintsDAO.java
 
 if errorlevel 1 (
     echo ERROR: Failed to compile DAO classes
@@ -102,11 +110,14 @@ echo ========================================
 echo STEP 4: Compiling Servlet Classes
 echo ========================================
 
-javac -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
+javac -cp "%CLASSPATH%" ^
   com/wastemanagement/controller/LoginServlet.java ^
   com/wastemanagement/controller/RegisterServlet.java ^
   com/wastemanagement/controller/LogoutServlet.java ^
-  com/wastemanagement/controller/WasteServlet.java
+  com/wastemanagement/controller/WasteServlet.java ^
+  com/wastemanagement/controller/CollectionServlet.java ^
+  com/wastemanagement/controller/RedemptionServlet.java ^
+  com/wastemanagement/controller/ComplaintsServlet.java
 
 if errorlevel 1 (
     echo ERROR: Failed to compile servlet classes

@@ -9,6 +9,11 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String role;
+    private String ward;
+    private String address;
+    private String qrCode;
+    private int points;
     private String createdAt;
     
     // Constructors
@@ -26,6 +31,14 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+    
+    public User(String name, String email, String password, String role, String qrCode) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.qrCode = qrCode;
     }
     
     // Getters and Setters
@@ -61,11 +74,51 @@ public class User {
         this.password = password;
     }
     
+    public String getRole() {
+        return role;
+    }
+    
+    public void setRole(String role) {
+        this.role = role;
+    }
+    
+    public String getQrCode() {
+        return qrCode;
+    }
+    
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+    
+    public int getPoints() {
+        return points;
+    }
+    
+    public void setPoints(int points) {
+        this.points = points;
+    }
+    
     public String getCreatedAt() {
         return createdAt;
     }
     
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+    
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

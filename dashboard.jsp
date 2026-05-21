@@ -12,8 +12,19 @@
 <body>
     <%
         Object userSession = session.getAttribute(Constants.SESSION_USER);
+        String role = (String) session.getAttribute(Constants.SESSION_ROLE);
         if (userSession == null) {
             response.sendRedirect("login.jsp");
+            return;
+        }
+        if (Constants.ROLE_ADMIN.equals(role)) {
+            response.sendRedirect("adminDashboard.jsp");
+            return;
+        } else if (Constants.ROLE_WORKER.equals(role)) {
+            response.sendRedirect("workerDashboard.jsp");
+            return;
+        } else if (Constants.ROLE_CITIZEN.equals(role)) {
+            response.sendRedirect("citizenDashboard.jsp");
             return;
         }
         String userName = (String) userSession;

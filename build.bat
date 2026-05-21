@@ -34,12 +34,23 @@ javac -encoding UTF-8 -cp "%JDBC_JAR%;%SERVLET_JAR%" ^
   com\wastemanagement\util\Constants.java ^
   com\wastemanagement\model\User.java ^
   com\wastemanagement\model\WasteRecord.java ^
+  com\wastemanagement\model\CollectionSession.java ^
+  com\wastemanagement\model\Redemption.java ^
+  com\wastemanagement\model\Complaint.java ^
   com\wastemanagement\dao\UserDAO.java ^
   com\wastemanagement\dao\WasteDAO.java ^
+  com\wastemanagement\dao\CollectionDAO.java ^
+  com\wastemanagement\dao\RedemptionDAO.java ^
+  com\wastemanagement\dao\ComplaintsDAO.java ^
   com\wastemanagement\controller\LoginServlet.java ^
   com\wastemanagement\controller\RegisterServlet.java ^
   com\wastemanagement\controller\LogoutServlet.java ^
-  com\wastemanagement\controller\WasteServlet.java
+  com\wastemanagement\controller\WasteServlet.java ^
+  com\wastemanagement\controller\CollectionServlet.java ^
+  com\wastemanagement\controller\RedemptionServlet.java ^
+  com\wastemanagement\controller\AdminRedemptionServlet.java ^
+  com\wastemanagement\controller\ComplaintsServlet.java
+
 
 if errorlevel 1 (
     echo.

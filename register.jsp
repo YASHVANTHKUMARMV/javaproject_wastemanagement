@@ -50,6 +50,34 @@
                     <input type="password" id="confirmPassword" name="confirmPassword" required>
                 </div>
                 
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select id="role" name="role" onchange="toggleCitizenFields()" required>
+                        <option value="CITIZEN" selected>Citizen</option>
+                        <option value="WORKER">Sanitation Worker</option>
+                        <option value="ADMIN">Municipal Officer (Admin)</option>
+                    </select>
+                </div>
+
+                <div id="citizenFields">
+                    <div class="form-group">
+                        <label for="ward">Ward:</label>
+                        <select id="ward" name="ward">
+                            <option value="">-- Select Ward --</option>
+                            <option value="Ward 1">Ward 1 - Green Glen</option>
+                            <option value="Ward 2">Ward 2 - Sunnyvale</option>
+                            <option value="Ward 3">Ward 3 - Riverside</option>
+                            <option value="Ward 4">Ward 4 - Metro Center</option>
+                            <option value="Ward 5">Ward 5 - Industrial Park</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea id="address" name="address" rows="2" placeholder="Enter your full street address"></textarea>
+                    </div>
+                </div>
+                
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
             </form>
             
@@ -57,5 +85,25 @@
             <p class="auth-link"><a href="index.jsp">Back to Home</a></p>
         </div>
     </div>
+
+    <script>
+        function toggleCitizenFields() {
+            var roleSelect = document.getElementById("role");
+            var citizenFields = document.getElementById("citizenFields");
+            var wardInput = document.getElementById("ward");
+            var addressInput = document.getElementById("address");
+            
+            if (roleSelect.value === "CITIZEN") {
+                citizenFields.style.display = "block";
+                wardInput.required = true;
+                addressInput.required = true;
+            } else {
+                citizenFields.style.display = "none";
+                wardInput.required = false;
+                addressInput.required = false;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", toggleCitizenFields);
+    </script>
 </body>
 </html>
